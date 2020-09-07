@@ -11,8 +11,17 @@
         v-model="domain"
       />
       <input type="button" value="Buscar" @click="fetchIpInfo()" />
-      {{ location }}
-      
+      {{ result }}
+      <div id="map-wrap" style="height: 100vh">
+        <no-ssr>
+          <l-map :zoom="13" :center="lat_lng">
+            <l-tile-layer
+              url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+            ></l-tile-layer>
+            <l-marker :lat-lng="lat_lng"></l-marker>
+          </l-map>
+        </no-ssr>
+      </div>
     </div>
   </div>
 </template>
@@ -25,21 +34,25 @@ export default {
       latitude: null,
       logitude: null,
       baseUrl: "https://geo.ipify.org/api/v1",
-      location: {}
+      location: {},
+      lat_lng: [-34.5349754, -58.5224896],
+      result: {}
     };
   },
   methods: {
     async fetchIpInfo() {
-      await this.$axios.$get(this.baseUrl, {
-        params: {
-          apiKey: process.env.API_KEY,
-          domain: this.domain
-        }
-      })
-      .then((result) => {
-        this.location = result.location;  
-      })
-      
+      await this.$axios
+        .$get(this.baseUrl, {
+          params: {
+            apiKey: process.env.API_KEY,
+            domain: this.domain
+          }
+        })
+        .then(result => {
+          this.location = result.location;
+          this.result = result;
+          this.lat_lng = [result.location.lat, result.location.lng];
+        });
     }
   }
 };
