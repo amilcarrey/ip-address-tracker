@@ -5,30 +5,44 @@
       <h1 class="title ">
         ip-address-tracker
       </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer text-green-400"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+      <input
+        type="text"
+        placeholder="Search for any Ip address or domain"
+        v-model="domain"
+      />
+      <input type="button" value="Buscar" @click="fetchIpInfo()" />
+      {{ location }}
+      
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data() {
+    return {
+      domain: "",
+      latitude: null,
+      logitude: null,
+      baseUrl: "https://geo.ipify.org/api/v1",
+      location: {}
+    };
+  },
+  methods: {
+    async fetchIpInfo() {
+      await this.$axios.$get(this.baseUrl, {
+        params: {
+          apiKey: process.env.API_KEY,
+          domain: this.domain
+        }
+      })
+      .then((result) => {
+        this.location = result.location;  
+      })
+      
+    }
+  }
+};
 </script>
 
 <style>
@@ -47,16 +61,8 @@ export default {}
 }
 
 .title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
+  font-family: "Quicksand", "Source Sans Pro", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   display: block;
   font-weight: 300;
   font-size: 100px;
