@@ -11,7 +11,8 @@
   "dependencies": {
     "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/dotenv": "^1.4.1",
-    "nuxt": "^2.14.0"
+    "nuxt": "^2.14.0",
+    "nuxt-leaflet": "0.0.21"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^2.1.0"
