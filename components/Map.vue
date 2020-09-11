@@ -15,12 +15,13 @@
 
 <script>
 export default {
-    props: {
-        lat_lng: {
-            type: Array,
-            default: [-34.5349754, -58.5224896]
-        },
-    },
+  name: "Map",
+  props: {
+    lat_lng: {
+      type: Array,
+      default: [-34.5349754, -58.5224896]
+    }
+  }
 };
 </script>
 
