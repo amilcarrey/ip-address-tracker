@@ -1,50 +1,61 @@
 <template>
   <div>
-    <div id="header">
+    <div id="header" class="">
       <div
         class="container mx-auto px-4 h-64 
-      flex flex-col "
+      flex flex-col"
       >
         <Title />
 
-        <SearchBar />
+        <div class="flex flex-row justify-center">
+          <input
+            class="bg-white focus:outline-none focus:shadow-outline border border-gray-300 rounded-l-lg py-2 px-4 md:w-1/2 w-full appearance-none leading-normal inline-flex mr-0"
+            type="text"
+            placeholder="Search for any domain"
+            v-model="domain"
+            @keyup.enter="fetchIpInfo()"
+          />
 
-        <div class="block">
-          {{ result }}
+          <button
+            class="bg-black text-white focus:outline-none focus:shadow-outline border border-black rounded-r-lg py-3 px-4 mx-0 inline-flex"
+            @click="fetchIpInfo()"
+          >
+            <img src="../assets/img/icon-arrow.svg" alt="arrow" />
+          </button>
         </div>
+        <Info
+          :ipAddress="ipAddress"
+          :location="location"
+          :timezone="timezone"
+          :isp="isp"
+        />
       </div>
     </div>
-    <!-- <Map lat_lng="lat_lng"/> -->
-    <div id="map-wrap" style="height: 72.7vh">
-      <no-ssr>
-        <l-map :zoom="13" :center="lat_lng">
-          <l-tile-layer
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-          ></l-tile-layer>
-          <l-marker :lat-lng="lat_lng"></l-marker>
-        </l-map>
-      </no-ssr>
+    <div class=z-0>
+      <Map :lat_lng="lat_lng" />
     </div>
   </div>
 </template>
 
 <script>
 import Title from "../components/Title";
-import SearchBar from "../components/SearchBar";
+import Info from "../components/Info";
 import Map from "../components/Map";
 export default {
   components: {
     Title,
-    SearchBar,
+    Info,
     Map
   },
   data() {
     return {
       domain: "",
       baseUrl: "https://geo.ipify.org/api/v1",
-      location: {},
       lat_lng: [-34.5349754, -58.5224896],
-      result: {}
+      location: "",
+      ipAddress: "",
+      isp: "",
+      timezone: ""
     };
   },
   methods: {
@@ -57,8 +68,10 @@ export default {
           }
         })
         .then(result => {
-          this.location = result.location;
-          this.result = result;
+          this.location = `${result.location.city}, ${result.location.region}, ${result.location.country}`;
+          this.ipAddress = result.ip;
+          this.isp = result.isp;
+          this.timezone = `UTC ${result.location.timezone}`;
           this.lat_lng = [result.location.lat, result.location.lng];
         });
     }
@@ -67,11 +80,6 @@ export default {
 </script>
 
 <style>
-/* Sample `apply` at-rules with Tailwind CSS
-.container {
-@apply min-h-screen flex justify-center items-center text-center mx-auto;
-}
-*/
 #header {
   background-image: url("../assets/img/pattern-bg.png");
   background-repeat: no-repeat;
