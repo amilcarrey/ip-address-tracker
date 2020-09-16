@@ -1,15 +1,13 @@
 <template>
-  <div>
-    <div id="map-wrap" style="height: 100vh">
-      <no-ssr>
-        <l-map :zoom="13" :center="lat_lng">
-          <l-tile-layer
-            url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
-          ></l-tile-layer>
-          <l-marker :lat-lng="lat_lng"></l-marker>
-        </l-map>
-      </no-ssr>
-    </div>
+  <div id="map-wrap" style="height: 72.7vh" class="z-0">
+    <no-ssr>
+      <l-map :zoom="13" :center="lat_lng">
+        <l-tile-layer
+          url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
+        ></l-tile-layer>
+        <l-marker :lat-lng="lat_lng"></l-marker>
+      </l-map>
+    </no-ssr>
   </div>
 </template>
 

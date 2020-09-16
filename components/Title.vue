@@ -1,7 +1,8 @@
 <template>
   <h1 class="font-semibold 
   font-sans 
-  text-5xl 
+  text-4xl
+  md:text-5xl 
   text-white 
   text-center 
   mb-6">
