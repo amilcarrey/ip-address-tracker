@@ -2,7 +2,7 @@
   <div>
     <div id="header" class="">
       <div
-        class="container mx-auto px-4 h-64 
+        class="container mx-auto px-4 h-32 
       flex flex-col"
       >
         <Title />
@@ -23,15 +23,15 @@
             <img src="../assets/img/icon-arrow.svg" alt="arrow" />
           </button>
         </div>
-        <Info
-          :ipAddress="ipAddress"
-          :location="location"
-          :timezone="timezone"
-          :isp="isp"
-        />
       </div>
+      <Info
+        :ipAddress="ipAddress"
+        :location="location"
+        :timezone="timezone"
+        :isp="isp"
+      />
     </div>
-    <div class=z-0>
+    <div class="z-0">
       <Map :lat_lng="lat_lng" />
     </div>
   </div>
@@ -59,21 +59,36 @@ export default {
     };
   },
   methods: {
+    isDomainValid(){
+      const regex = new RegExp("(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]");
+
+      const isValid = regex.test(this.domain);
+      return isValid;
+    },
     async fetchIpInfo() {
-      await this.$axios
-        .$get(this.baseUrl, {
-          params: {
-            apiKey: process.env.API_KEY,
-            domain: this.domain
-          }
-        })
-        .then(result => {
-          this.location = `${result.location.city}, ${result.location.region}, ${result.location.country}`;
-          this.ipAddress = result.ip;
-          this.isp = result.isp;
-          this.timezone = `UTC ${result.location.timezone}`;
-          this.lat_lng = [result.location.lat, result.location.lng];
-        });
+      if (this.isDomainValid()) {
+        
+        await this.$axios
+          .$get(this.baseUrl, {
+            params: {
+              apiKey: process.env.API_KEY,
+              domain: this.domain
+            }
+          })
+          .then(result => {
+            this.location = `${result.location.city}, ${result.location.region}, ${result.location.country}`;
+            this.ipAddress = result.ip;
+            this.isp = result.isp;
+            this.timezone = `UTC ${result.location.timezone}`;
+            this.lat_lng = [result.location.lat, result.location.lng];
+          })
+          .catch(err => {
+            alert("Ha ocurrido un error. Revisa si el dominio es valido.")
+          })
+      }
+      else{
+        alert('No es un dominio valido.')
+      }
     }
   }
 };
