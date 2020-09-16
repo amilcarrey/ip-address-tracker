@@ -1,6 +1,6 @@
 <template>
     <div class="block mt-16 ">
-          <div class="block md:flex md:justify-around rounded-lg bg-gray-100 py-4 md:pd-8">
+          <div class="block md:flex md:justify-around bg-gray-100 py-4 md:pd-8">
             <div class="px-6 py-2 md:py-4 md:border-r-2 w-full md:w-1/4">
               <span class="block text-xs font-medium text-gray-600">IP ADDRESS</span>
               <span class="text-2xl font-bold">{{ ipAddress }}</span>
